@@ -22,6 +22,19 @@ public class FlowNetwork {
         }
     }
 
+    public void addEdge(int from, int to, int capacity){
+
+        Edge forwardEdge = new Edge(from, to, capacity);
+        Edge backwardEdge = new Edge(to ,from,0);
+
+        forwardEdge.setResidualEdge(backwardEdge);
+        backwardEdge.setResidualEdge(forwardEdge);
+
+        adjacencyList.get(from).add(forwardEdge);
+        adjacencyList.get(to).add(backwardEdge);
+
+    }
+
     public int getNodesCount(){
         return nodesCount;
     }
@@ -47,5 +60,42 @@ public class FlowNetwork {
         private int capacity;
         private int flow;
         private Edge residualEdge;
+
+        public Edge(int from , int to, int capacity){
+
+            this.from = from;
+            this.to = to;
+            this.capacity = capacity;
+            this.flow = 0;
+        }
+
+        public void setResidualEdge(Edge residualEdge) {
+            this.residualEdge = residualEdge;
+        }
+        public int getRemainingCapacity(){
+
+            return capacity-flow;
+        }
+
+        public void augmented(int bottleneck){
+            flow+=bottleneck;
+            residualEdge.flow-=bottleneck;
+        }
+        public int getFrom() {
+            return from;
+        }
+
+        public int getTo() {
+            return to;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        public int getFlow() {
+            return flow;
+        }
+
     }
 }
